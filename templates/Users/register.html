@@ -1,0 +1,90 @@
+{% extends "Store/base.html" %}
+{% load static %}
+
+{% block content %}
+<main>
+    <!-- Account-Login -->
+    <section class="forget-password">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-md-12">
+                    <div class="account-sign-in">
+                        <h5 class="text-center">Sign up</h5>
+                        <form method="POST" action="{% url  'Users:register' %}">
+                            {% csrf_token %}
+                            
+                            <div class="form__div">
+                                <input type="text" class="form__input"  id="username"placeholder=" " name="username">
+                                <label for="" class="form__label">UserName</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="text" class="form__input"  id="first_name" name="first_name" placeholder=" ">
+                                <label for="" class="form__label">First Name</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="text" class="form__input"  id="last_name" name="last_name" placeholder=" ">
+                                <label for="" class="form__label">Last Name</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="email" class="form__input" id="email" name="email" placeholder=" ">
+                                <label for="" class="form__label">Email</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="password" class="form__input" id="password1" name="password1" placeholder=" ">
+                                <label for="" class="form__label">Password</label>
+                            </div>
+                            <div class="form__div mb-0">
+                                <input type="password" class="form__input" id="password2" name="password2" placeholder=" ">
+                                <label for="" class="form__label">Repeat Password</label>
+                            </div>
+                            <br><br>
+                          
+                        
+                    
+                                {% if field.help_text %}
+                                    <small style="color:gray";>{{field.help_text}}</small>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                <p style="color:red";>{{error}}</p>
+                                {% endfor %}
+                    
+                            </p>
+                           
+                       
+                            <!-- <div class="form__div">
+                                <input type="text" class="form__input"  id="username"placeholder=" ">
+                                <label for="" class="form__label">UserName</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="text" class="form__input"  id="first_name"placeholder=" ">
+                                <label for="" class="form__label">First Name</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="text" class="form__input"  id="last_name"placeholder=" ">
+                                <label for="" class="form__label">Last Name</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="email" class="form__input" id="email" placeholder=" ">
+                                <label for="" class="form__label">Email</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="password" class="form__input" id="password1" placeholder=" ">
+                                <label for="" class="form__label">Password</label>
+                            </div>
+                            <div class="form__div mb-0">
+                                <input type="password" class="form__input" id="password2" placeholder=" ">
+                                <label for="" class="form__label">Repeat Password</label>
+                            </div> -->
+                           
+                            <button type="submit" class="btn bg-primary">Register</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+   
+{% endblock content %}

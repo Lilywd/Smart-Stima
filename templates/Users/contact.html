@@ -1,0 +1,47 @@
+{% extends 'Store/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <!-- Account-Login -->
+    <section class="account-sign">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-6 col-md-12">
+                    <div class="account-sign-up">
+                        <h5 class="text-center">Contact Us</h5>
+                        <form method="POST" action="{% url  'Users:contact' %}">
+                            {% csrf_token %}
+                            <div class="form__div">
+                                <input type="text" class="form__input"  id="first_name" name="first_name" placeholder=" " required>
+                                <label for="" class="form__label">First Name</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="text" class="form__input"  id="last_name" name="last_name" placeholder=" " required>
+                                <label for="" class="form__label">Last Name</label>
+                            </div>
+                            <div class="form__div">
+                                <input type="email" class="form__input" id="email" name="email" placeholder=" " required>
+                                <label for="" class="form__label">Email</label>
+                            </div>
+                            <div class="form__div">
+                                <textarea name="message" class="form__input" id="message" name="message" placeholder=" " cols="55" rows="5" required></textarea>
+
+                                <label for="" class="form__label">Message</label>
+
+                            </div>
+                           <br><br><br>
+                        
+                            <button type="submit" class="btn bg-primary">Contact Us</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+   
+
+{% endblock content %}

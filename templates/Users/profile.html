@@ -1,0 +1,69 @@
+{% extends 'Store/base.html' %}
+{% load static %}
+
+{% block content %}
+
+        <!--Acount Area Start -->
+        <section class="account">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- Dashboard-Nav  Start-->
+                        <div class="dashboard-nav">
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><a href="/dashboard" class="active">Account
+                                        settings</a></li>
+                                <li class="list-inline-item"><a href="/password_change">Change Password</a></li>
+                        
+                                <li class="list-inline-item"><a href="/signout">Logout</a></li>
+                               
+                            </ul>
+                        </div>
+                        <!-- Dashboard-Nav  End-->
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="account-setting">
+                            <h6>Account settings</h6>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <div class="form__div">
+                                    <input type="text" class="form__input" id="username" name="username" placeholder="
+                                    " required  value="{{profile_form.initial.username}}"/>
+                                    <label for="" class="form__label">UserName</label>
+                                </div>
+                                <div class="form__div">
+                                    <input type="email" class="form__input" id="email" name="email" placeholder="
+                                    " required  value="{{profile_form.initial.email}}"/>
+                                    <label for="" class="form__label">Email</label>
+                                </div>
+                                {% for field in profile_form %}
+                                <p>
+                                   {% for error in field.errors %}
+                                    <p style="color:red;">{{error}}</p>
+                                    {% endfor %}
+                                </p>
+                                {% endfor %}
+                                {% if profile_form.non_field_errors %}
+                                    <div style="color:red;">
+                                        <p> {{profile_form.non_field_errors}}</p>
+                        
+                                    </div>
+                                {% endif %}
+                                {% if success_message %}
+                                    <p style="color:green; margin-left: 15%;">{{success_message}}</p>
+                                {% endif  %}
+                                <button type="submit" class="btn bg-primary">Save Changes</button>
+                            </form>
+                           
+                        </div>
+                       
+                    </div>
+                   
+                </div>
+            </div>
+        </section>
+        <!--Acount Area End -->
+
+    </main>
+
+   {% endblock content %}
