@@ -247,7 +247,7 @@ def newsletter(request):
 			receivers = form.cleaned_data.get('receivers').split(',')
 			email_message = form.cleaned_data.get('message')
 
-			mail = EmailMessage(subject, email_message, f"PyLessons <{request.user.email}>", bcc=receivers)
+			mail = EmailMessage(subject, email_message, f"Smart Stima <{request.user.email}>", bcc=receivers)
 			mail.content_subtype = 'html'
 
 			if mail.send():
