@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render,redirect
 from django.contrib.auth import login, authenticate,logout
-from Users.forms import RegistrationForm, UserAuthenticationForm, UserUpdateForm,ContactForm
+from Users.forms import RegistrationForm, UserAuthenticationForm, UserUpdateForm,ContactForm,NewsletterForm
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
@@ -238,30 +238,35 @@ def subscribe(request):
         messages.success(request, f'{email} email was successfully subscribed to our newsletter!')
         return redirect(request.META.get("HTTP_REFERER", "/"))
 
-# @user_is_superuser
-# def newsletter(request):
-# 	if request.method == 'POST':
-# 		form = NewsletterForm(request.POST)
-# 		if form.is_valid():
-# 			subject = form.cleaned_data.get('subject')
-# 			receivers = form.cleaned_data.get('receivers').split(',')
-# 			email_message = form.cleaned_data.get('message')
+@user_is_superuser
+def newsletter(request):
+	if request.method == 'POST':
+		form = NewsletterForm(request.POST)
+		if form.is_valid():
+			subject = form.cleaned_data.get('subject')
+			receivers = form.cleaned_data.get('receivers').split(',')
+			email_message = form.cleaned_data.get('message')
 
-# 			mail = EmailMessage(subject, email_message, f"PyLessons <{request.user.email}>", bcc=receivers)
-# 			mail.content_subtype = 'html'
+			mail = EmailMessage(subject, email_message, f"PyLessons <{request.user.email}>", bcc=receivers)
+			mail.content_subtype = 'html'
 
-# 			if mail.send():
-# 				messages.success(request, "Email sent succesfully")
-# 			else:
-# 				messages.error(request, "There was an error sending email")
+			if mail.send():
+				messages.success(request, "Email sent succesfully")
+			else:
+				messages.error(request, "There was an error sending email")
 
-# 		else:
-# 			for error in list(form.errors.values()):
-# 				messages.error(request, error)
+		else:
+			for error in list(form.errors.values()):
+				messages.error(request, error)
 
-# 		return redirect('/')
+		return redirect('/')
 
   
-# 	form = NewsletterForm()
-# 	form.fields["receivers"].initial = ','.join([active.email for active in SubscribedUsers.objects.all()])
-# 	return render(request=request, template_name='Users/newsletter.html', context={"form": form})
+	form = NewsletterForm()
+	form.fields["receivers"].initial = ','.join([active.email for active in SubscribedUsers.objects.all()])
+	return render(request=request, template_name='Users/newsletter.html', context={"form": form})
+
+
+def social_login(request):
+    
+    return render(request,'social_login.html')

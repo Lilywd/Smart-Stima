@@ -13,5 +13,5 @@ urlpatterns = [
     path('profile', views.profile, name="profile"),
     path("password_reset", views.password_reset_request, name="password_reset"),
     path('subscribe', views.subscribe, name='subscribe'),
-    # path("newsletter", views.newsletter, name="newsletter"),
+    path("newsletter", views.newsletter, name="newsletter"),
 ]

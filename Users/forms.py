@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from Users.models import User
 from django.contrib.auth import authenticate
-# from tinymce.widgets import TinyMCE
+from tinymce.widgets import TinyMCE
 
 class RegistrationForm(UserCreationForm):
     username = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': ''}))
@@ -69,7 +69,7 @@ class ContactForm(forms.Form):
 	# message = forms.CharField(widget=forms.Textarea(attrs={'class': '','cols':'20'}))
 
 
-# class NewsletterForm(forms.Form):
-#     subject = forms.CharField()
-#     receivers = forms.CharField()
-#     message = forms.CharField(widget=TinyMCE(), label="Email content")
+class NewsletterForm(forms.Form):
+    subject = forms.CharField()
+    receivers = forms.CharField()
+    message = forms.CharField(widget=TinyMCE(), label="Email content")
