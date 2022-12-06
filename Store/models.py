@@ -20,6 +20,12 @@ LABEL_CHOICES = {
   
   
 }
+
+COUNTRY_CHOICES ={
+    ('K', 'kenya'),
+    ('U', 'uganda'),
+    ('T', 'tanzania'),
+}
 #product
 class Item(models.Model):
     title = models.CharField(max_length=100)
@@ -75,6 +81,8 @@ class OrderItem(models.Model):
             return self.get_total_discount_item_price()
         return self.get_total_item_price()
 
+
+
 # product in cart
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
@@ -111,8 +119,6 @@ class Order(models.Model):
         return total
 
     
-    
-
 
 
 class DeliveryAddress(models.Model):
@@ -124,7 +130,7 @@ class DeliveryAddress(models.Model):
     city = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
   
-    country = CountryField(multiple=False)
+    country = models.CharField(max_length=1,choices=COUNTRY_CHOICES)
    
     zip = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
@@ -132,6 +138,7 @@ class DeliveryAddress(models.Model):
 
     def __str__(self):
         return self.user.username
+
 
 
 class Payment(models.Model):

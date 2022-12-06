@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from Store.forms import BillingForm, CouponForm
+from Store.forms import CouponForm
 from django.http import HttpResponse
 
 from django.conf import settings
@@ -145,9 +145,9 @@ class BillingView(View):
         try:
             order = Order.objects.get(user=self.request.user,ordered=False)
            
-            form = BillingForm()
+            
             context = {
-                'form': form,
+                
                 'couponform' : CouponForm(),
                 'order' : order,
                
@@ -159,20 +159,21 @@ class BillingView(View):
        
     
     def post(self, *args, **kwargs):
-        form = BillingForm(self.request.POST or None)
+        
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
-            if form.is_valid():
-                first_name = form.cleaned_data.get('first_name')
-                last_name = form.cleaned_data.get('last_name')
-                address = form.cleaned_data.get('address')
-                apartment = form.cleaned_data.get('apartment')
-                city = form.cleaned_data.get('city')
-                country = form.cleaned_data.get('country')
-                zip = form.cleaned_data.get('zip')
-                phone = form.cleaned_data.get('phone')
-                email = form.cleaned_data.get('email')
-                payment_option = form.cleaned_data.get('payment_option')
+            if request.method == "POST":
+                
+                first_name = request.POST["first_name"]
+                last_name = request.POST["last_name"]
+                address = request.POST["address"]
+                apartment = request.POST["apartment"]
+                city = request.POST["city"]
+                country = request.POST["country"]
+                zip = request.POST["zip"]
+                phone = request.POST["phone"]
+                email= request.POST["email"]
+                
                 delivery_address = DeliveryAddress (
                     user=self.request.user,
                     first_name= first_name,
@@ -188,18 +189,10 @@ class BillingView(View):
                 order.delivery_address = delivery_address
                 order.save()
 
-                if payment_option == 'M':
-                    return redirect('Store:payment', payment_option=',mpesa')
-                elif payment_option == 'P':
-                    return redirect('Store:payment', payment_option='paypal')
-                else:
-                    messages.warning(
-                        self.request, "Invalid payment option selected")
-                    return redirect('Store:delivery')
-
                 
-            messages.warning(request, 'failed')
-            return redirect('Store:billing')
+            else:    
+                messages.warning(self.request, 'Checkout failed')
+                return redirect('Store:billing')
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
             return redirect("Store:cart")
@@ -220,7 +213,7 @@ class PaymentView(View):
             return render(self.request, 'Store/payment.html', context)
         else:
             messages.error(self.request, 'you have not added your delivery information ')
-            return redirect('Store:delivery') 
+            return redirect('Store:billing') 
 
     def post(self,*args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
