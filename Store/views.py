@@ -141,7 +141,12 @@ def remove_single_item_from_cart(request, slug):
         return redirect("Store:product", slug=slug)
         
 class BillingView(View):
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        user= request.user
+        try:
+            delivery = DeliveryAddress.objects.get(user=user)
+        except:
+            delivery = ""
         try:
             order = Order.objects.get(user=self.request.user,ordered=False)
            
@@ -150,79 +155,84 @@ class BillingView(View):
                 'form': form,
                 'couponform' : CouponForm(),
                 'order' : order,
+                "delivery":delivery
                
                 }
             return render(self.request, 'Store/billing.html', context)
         except ObjectDoesNotExist:
             messages.info(self.request, 'you do not have an active order')
-            return redirect('Store:billing')  
-       
+            return redirect('Store:billing')   
     
-    def post(self, *args, **kwargs):
-        form = BillingForm(self.request.POST or None)
+    def post(self, request, *args, **kwargs):
+        user= request.user
+        order = Order.objects.get(user=self.request.user, ordered=False)
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
+        email = request.POST["email"]
+        address = request.POST["address"]
+        apartment = request.POST["apartment"]
+        city = request.POST["city"]
+        country = request.POST["country"]
+        zip = request.POST["zip"]
+        phone = request.POST["phone"]
+        # payment_option = "M"
+        delivery_address = DeliveryAddress(user= self.request.user, first_name=first_name,
+        last_name= last_name, address=address, city=city, apartment=apartment,country=country,
+        zip=zip, phone=phone, email=email)
+        delivery = DeliveryAddress.objects.filter(user=self.request.user).exists()
+        if delivery:
+            DeliveryAddress.objects.filter(user=user).update(user= self.request.user, first_name=first_name,
+        last_name= last_name, address=address, city=city, apartment=apartment,country=country,zip = zip, phone=phone, email=email)
+
+        else:
+            delivery_address.save()
         try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            if form.is_valid():
-                first_name = form.cleaned_data.get('first_name')
-                last_name = form.cleaned_data.get('last_name')
-                address = form.cleaned_data.get('address')
-                apartment = form.cleaned_data.get('apartment')
-                city = form.cleaned_data.get('city')
-                country = form.cleaned_data.get('country')
-                zip = form.cleaned_data.get('zip')
-                phone = form.cleaned_data.get('phone')
-                email = form.cleaned_data.get('email')
-                payment_option = form.cleaned_data.get('payment_option')
-                delivery_address = DeliveryAddress (
-                    user=self.request.user,
-                    first_name= first_name,
-                    last_name=last_name,
-                    address=address,
-                    apartment=apartment,
-                    city=city,
-                    country=country,
-                    zip=zip,
-                    phone=phone,
-                    email=email )
-                delivery_address.save()
-                order.delivery_address = delivery_address
-                order.save()
+            Order.objects.filter(user=self.request.user, ordered=False).update(delivery_address = delivery_address)
+        except:
+            pass
+        return redirect('Store:shipping')
 
-                if payment_option == 'M':
-                    return redirect('Store:payment', payment_option=',mpesa')
-                elif payment_option == 'P':
-                    return redirect('Store:payment', payment_option='paypal')
-                else:
-                    messages.warning(
-                        self.request, "Invalid payment option selected")
-                    return redirect('Store:delivery')
 
-                
-            messages.warning(request, 'failed')
-            return redirect('Store:billing')
-        except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
-            return redirect("Store:cart")
-        
-       
-        
-
+def shipping(request):
+    if request.method == "POST":
+        shipping = request.POST["shipping"]
+        order = Order.objects.get(user=request.user, ordered=False)
+        if shipping == "1":
+            total = order.get_total()
+            Order.objects.filter(user=request.user, ordered=False).update(shipping_method = 1)
+        elif shipping == "2":
+            total = order.get_total() + 19.99
+            Order.objects.filter(user=request.user, ordered=False).update(shipping_method = 2)
+        elif shipping == "3":
+            total = order.get_total() + 29.99
+            Order.objects.filter(user=request.user, ordered=False).update(shipping_method = 3)
+        # print(total)
+        return redirect('Store:payment')
+    user= request.user
+    try:
+        delivery = DeliveryAddress.objects.get(user=user)
+    except:
+        delivery = ""
+    context ={"user":user, "delivery":delivery}
+    return render(request, 'Store/shipping.html', context)
 
 class PaymentView(View):
-    def get(self,*args, **kwargs):
-        order = Order.objects.get(user=self.request.user, ordered=False)
+    def get(self, request,*args, **kwargs):
+        user = request.user
+        order = Order.objects.get(user=request.user, ordered=False)
+        try:
+            delivery = DeliveryAddress.objects.get(user=user)
+        except:
+            delivery = ""
+        context ={"user":user, "delivery":delivery, "order":order}
+        print(order.items.count())
         if order.delivery_address:
-
-            context = {
-                'order': order,
-                
-            }
             return render(self.request, 'Store/payment.html', context)
         else:
             messages.error(self.request, 'you have not added your delivery information ')
-            return redirect('Store:delivery') 
+            return redirect('Store:billing') 
 
-    def post(self,*args, **kwargs):
+    def post(self, request, *args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
         token = self.request.POST.get('stripeToken')
         amount= int(order.get_total() * 100)
@@ -296,36 +306,55 @@ class PaymentView(View):
         
     
             
-# def get_coupon(request, code):
-#     try:
-#         coupon = Coupon.objects.get(code=code)
-#         return coupon
-#     except ObjectDoesNotExist:
-#         messages.info(request, 'coupon does not exist')
-#         return redirect('Store:billing')  
+def get_coupon(request, code):
+    try:
+        coupon = Coupon.objects.get(code=code)
+        return coupon
+    except ObjectDoesNotExist:
+        messages.info(request, 'coupon does not exist')
+        return redirect('Store:billing')  
        
-# class AddCouponView(View):
-#     def post(self, *args, **kwargs):
-#             form =  CouponForm(self.request.POST or None)
-#             if form.is_valid():
+class AddCouponView(View):
+    def post(self, request, *args, **kwargs):
+        coupon_code = request.POST["coupon"]
+        order = Order.objects.filter(user=request.user,ordered=False).exists()
+        if order == False:
+            messages.info(request, 'you do not have an active order')
+            return redirect('Store:billing')
+        
+        coupon = Coupon.objects.filter(code=coupon_code).exists()
+        if coupon == False:
+            messages.info(request, 'the coupon code you entered is invalid')
+            return redirect('Store:billing')
+        coupon = Coupon.objects.get(code = coupon_code)
+        Order.objects.filter(user=request.user, ordered=False).update(coupon = coupon)
+        order = Order.objects.get(user=request.user, ordered=False)
+        total = order.get_total()
+        total -= coupon.amount
+        Order.objects.filter(user=request.user, ordered=False).update(total = total)
+        messages.success(self.request, 'Coupon successfully added')
+        return redirect('Store:billing')
+        
 
-#                 try:
-#                     code = form.cleaned_data.get('code')
-#                     order = Order.objects.get(user=self.request.user,ordered=False)
-#                     order.coupon = get_coupon(self.request, code)
-#                     order.save()
-#                     messages.success(self.request, 'Coupon successfully added')
-#                     return redirect('Store:billing')  
+            # form =  CouponForm(self.request.POST or None)
+            # if form.is_valid():
 
-#                 except ObjectDoesNotExist:
-#                     messages.info(self.request, 'you do not have an active order')
-#                     return redirect('Store:billing')  
-#             messages.info(self.request, 'you do not have an active order')
-#             return redirect('Store:cart') 
+            #     try:
+            #         code = form.cleaned_data.get('code')
+            #         order = Order.objects.get(user=self.request.user,ordered=False)
+            #         order.coupon = get_coupon(self.request, code)
+            #         order.save()
+            #         messages.success(self.request, 'Coupon successfully added')
+            #         return redirect('Store:billing')  
+
+            #     except ObjectDoesNotExist:
+            #         messages.info(self.request, 'you do not have an active order')
+            #         return redirect('Store:billing')  
+            # messages.info(self.request, 'you do not have an active order')
+            # return redirect('Store:cart') 
         
         
-def shipping(request):
-    return render(request, 'Store/shipping.html')
+
 
 
 

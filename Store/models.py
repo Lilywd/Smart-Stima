@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.shortcuts import reverse
-from django_countries.fields import CountryField
+
 
 # Create your models here.
 CATEGORY_CHOICES = {
@@ -17,6 +17,13 @@ CATEGORY_CHOICES = {
 LABEL_CHOICES = {
     ('N', 'new'),
     ('S', 'sale')
+  
+  
+}
+COUNTRY_CHOICES = {
+    ('K', ' kenya'),
+    ('U', 'uganda'),
+    ('T', 'tanzania')
   
   
 }
@@ -64,6 +71,7 @@ class OrderItem(models.Model):
     def get_total_item_price(self):
         return self.quantity * self.item.price
 
+
     def get_total_discount_item_price(self):
         return self.quantity * self.item.discount_price
 
@@ -83,32 +91,32 @@ class Order(models.Model):
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
-
+    shipping_method = models.IntegerField(default=1)
     delivery_address = models.ForeignKey('DeliveryAddress', on_delete=models.SET_NULL,blank=True, null=True)
     payment = models.ForeignKey('Payment', on_delete=models.SET_NULL,blank=True, null=True)
     
     coupon = models.ForeignKey('Coupon', on_delete=models.SET_NULL,blank=True, null=True)
-   
+
    # order status 
     delivery = models.BooleanField(default=False)
     received = models.BooleanField(default=False)
     refund_requested = models.BooleanField(default=False)
     refund_granted = models.BooleanField(default=False)
     refund_not_granted = models.BooleanField(default=False)
-
+    total = models.FloatField(default=0)
 
     def __str__(self):
        return self.user.username
        
 
     def get_total(self):
-        total = 0
+        self.total = 0
         for order_item in self.items.all():
-            total += order_item.get_final_price()
-        if self.coupon:
-            total -= self.coupon.amount
+            self.total += order_item.get_final_price()
+        # if self.coupon:
+        #     total -= self.coupon.amount
     
-        return total
+        return self.total
 
     
     
@@ -124,7 +132,7 @@ class DeliveryAddress(models.Model):
     city = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
   
-    country = CountryField(multiple=False)
+    country = models.CharField(max_length=1, choices=COUNTRY_CHOICES)
    
     zip = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)

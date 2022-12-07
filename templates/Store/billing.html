@@ -265,19 +265,19 @@
                         </div>
                         <div class="deliver-info-form">
                             <h6>Billing information</h6>
-                            <form action=".">
+                            <form action="{% url 'Store:billing' %}" method="POST">
+                                {% csrf_token %}
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form__div">
-                                            <input type="text" class="form__input" placeholder="
-                                            ">
+                                            <input type="text" class="form__input" name="first_name" placeholder="" value= "{{delivery.first_name}}" required >
                                             <label for="" class="form__label">First Name</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form__div">
-                                            <input type="text" class="form__input" placeholder="
-                                            ">
+                                            <input type="text" class="form__input" name="last_name" placeholder="
+                                            " value= "{{delivery.last_name}}" required>
                                             <label for="" class="form__label">Last Name</label>
                                         </div>
                                     </div>
@@ -285,8 +285,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div">
-                                            <input type="text" class="form__input" placeholder="
-                                            ">
+                                            <input type="text" class="form__input" name="address" placeholder="
+                                            " value= "{{delivery.address}}" required>
                                             <label for="" class="form__label">Address</label>
                                         </div>
                                     </div>
@@ -294,8 +294,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div">
-                                            <input type="text" class="form__input" placeholder="
-                                            ">
+                                            <input type="text" class="form__input" name="apartment" placeholder="
+                                            " value= "{{delivery.apartment}}" required>
                                             <label for="" class="form__label">Apartment, House</label>
                                         </div>
                                     </div>
@@ -303,15 +303,15 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div mb-0">
-                                            <input type="text" class="form__input" placeholder="
-                                            ">
+                                            <input type="text" class="form__input" name="city" placeholder="
+                                            " value= "{{delivery.city}}" required>
                                             <label for="" class="form__label">City</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-4 col-12 mt-30">
-                                        <select name="" id="">
+                                        <select name="country" id="" required>
                                             <option value="01">Country/Region</option>
                                             <option value="02">Kenya</option>
                                             <option value="02">Uganda</option>
@@ -321,8 +321,8 @@
                                   
                                     <div class="col-lg-4 col-md-4 col-12 mt-30">
                                         <div class="form__div">
-                                            <input type="text" class="form__input" placeholder="
-                                            ">
+                                            <input type="text" class="form__input" name="zip" placeholder="
+                                            " value= "{{delivery.zip}}" required>
                                             <label for="" class="form__label">Zip Code</label>
                                         </div>
                                     </div>
@@ -330,8 +330,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div">
-                                            <input type="text" class="form__input" placeholder="
-                                            ">
+                                            <input type="text" class="form__input" name="phone" placeholder="
+                                            " value= "{{delivery.phone}}">
                                             <label for="" class="form__label">Phone</label>
                                         </div>
                                     </div>
@@ -339,8 +339,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div">
-                                            <input type="email" class="form__input" placeholder="
-                                            ">
+                                            <input type="email" class="form__input" name="email" placeholder="
+                                            " value= "{{delivery.email}}" required>
                                             <label for="" class="form__label">Email</label>
                                         </div>
                                     </div>
@@ -398,7 +398,7 @@
                                 </div>
                                 
                                 <div class="total-price">
-                                    <p>${{ order.get_total}}</p>
+                                    <p>${{order.total}}</p>
                                 </div>
     
                             </div>

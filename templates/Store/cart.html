@@ -147,9 +147,10 @@
                 <div class="col-lg-6">
                     <div class="apply-coupon">
                         <h6>Apply Coupon</h6>
-                        <form action="#">
+                        <form action="{% url 'Store:add-coupon' %}" method="POST">
+                            {% csrf_token %}
                             <div class="form__div">
-                                <input type="text" class="form__input" placeholder=" ">
+                                <input type="text" class="form__input" name="coupon" placeholder=" " required>
                                 <label for="" class="form__label">Coupon Code</label>
                             </div>
                             <button class="btn bg-primary" type="submit">apply COUPON</button>
