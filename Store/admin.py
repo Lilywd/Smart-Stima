@@ -1,5 +1,9 @@
 from django.contrib import admin
+<<<<<<< HEAD
 from.models import Coupon, Item, OrderItem, Order, Payment, DeliveryAddress
+=======
+from.models import Coupon, DeliveryAddress, Item, OrderItem, Order, Payment
+>>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
 # Register your models here.
 
 class OrderAdmin(admin.ModelAdmin):
