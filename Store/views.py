@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from Store.forms import CouponForm
+from Store.forms import CouponForm,BillingForm
 from django.http import HttpResponse
 
 from django.conf import settings
@@ -150,9 +150,9 @@ class BillingView(View):
         try:
             order = Order.objects.get(user=self.request.user,ordered=False)
            
-            
+            form = BillingForm()
             context = {
-                
+                'form': form,
                 'couponform' : CouponForm(),
                 'order' : order,
                 "delivery":delivery
@@ -163,7 +163,6 @@ class BillingView(View):
             messages.info(self.request, 'you do not have an active order')
             return redirect('Store:billing')   
     
-
     def post(self, request, *args, **kwargs):
         user= request.user
         order = Order.objects.get(user=self.request.user, ordered=False)
@@ -192,49 +191,6 @@ class BillingView(View):
         except:
             pass
         return redirect('Store:shipping')
-
-
-    def post(self, *args, **kwargs):
-        
-        try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            if request.method == "POST":
-                
-                first_name = request.POST["first_name"]
-                last_name = request.POST["last_name"]
-                address = request.POST["address"]
-                apartment = request.POST["apartment"]
-                city = request.POST["city"]
-                country = request.POST["country"]
-                zip = request.POST["zip"]
-                phone = request.POST["phone"]
-                email= request.POST["email"]
-                
-                delivery_address = DeliveryAddress (
-                    user=self.request.user,
-                    first_name= first_name,
-                    last_name=last_name,
-                    address=address,
-                    apartment=apartment,
-                    city=city,
-                    country=country,
-                    zip=zip,
-                    phone=phone,
-                    email=email )
-                delivery_address.save()
-                order.delivery_address = delivery_address
-                order.save()
-
-                
-            else:    
-                messages.warning(self.request, 'Checkout failed')
-                return redirect('Store:billing')
-        except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
-            return redirect("Store:cart")
-        
-       
-        
 
 
 def shipping(request):

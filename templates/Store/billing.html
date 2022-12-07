@@ -1,7 +1,5 @@
 {% extends 'Store/base.html' %}
-
 {% load cart_template_tags %}
-{% load crispy_forms_tags %}
 {% load static %}
 
 {% block content %}
@@ -56,36 +54,19 @@
                         </div>
                         <div class="deliver-info-form">
                             <h6>Billing information</h6>
-<<<<<<< HEAD
                             <form action="{% url 'Store:billing' %}" method="POST">
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form__div">
                                             <input type="text" class="form__input" name="first_name" placeholder="" value= "{{delivery.first_name}}" required >
-=======
-                            <form method="POST" action="{% url  'Store:billing' %}">
-                                {% csrf_token %}
-                                
-                                
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6">
-                                        <div class="form__div">
-                                            <input type="text" class="form__input" id="first_name"  name="first_name"placeholder="
-                                            ">
->>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
                                             <label for="" class="form__label">First Name</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form__div">
-<<<<<<< HEAD
                                             <input type="text" class="form__input" name="last_name" placeholder="
                                             " value= "{{delivery.last_name}}" required>
-=======
-                                            <input type="text" class="form__input" id="last_name"  name="last_name" placeholder="
-                                            ">
->>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
                                             <label for="" class="form__label">Last Name</label>
                                         </div>
                                     </div>
@@ -93,13 +74,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div">
-<<<<<<< HEAD
                                             <input type="text" class="form__input" name="address" placeholder="
                                             " value= "{{delivery.address}}" required>
-=======
-                                            <input type="text" class="form__input"  id="address"  name="address"placeholder="
-                                            ">
->>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
                                             <label for="" class="form__label">Address</label>
                                         </div>
                                     </div>
@@ -107,13 +83,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div">
-<<<<<<< HEAD
                                             <input type="text" class="form__input" name="apartment" placeholder="
                                             " value= "{{delivery.apartment}}" required>
-=======
-                                            <input type="text" class="form__input" id="apartment"  name="apartment" placeholder="
-                                            ">
->>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
                                             <label for="" class="form__label">Apartment, House</label>
                                         </div>
                                     </div>
@@ -121,24 +92,15 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div mb-0">
-<<<<<<< HEAD
                                             <input type="text" class="form__input" name="city" placeholder="
                                             " value= "{{delivery.city}}" required>
-=======
-                                            <input type="text" class="form__input" id="city"  name="city" placeholder="
-                                            ">
->>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
                                             <label for="" class="form__label">City</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-4 col-12 mt-30">
-<<<<<<< HEAD
                                         <select name="country" id="" required>
-=======
-                                        <select name="country" id="country">
->>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
                                             <option value="01">Country/Region</option>
                                             <option value="02">Kenya</option>
                                             <option value="02">Uganda</option>
@@ -148,13 +110,8 @@
                                   
                                     <div class="col-lg-4 col-md-4 col-12 mt-30">
                                         <div class="form__div">
-<<<<<<< HEAD
                                             <input type="text" class="form__input" name="zip" placeholder="
                                             " value= "{{delivery.zip}}" required>
-=======
-                                            <input type="text" class="form__input"id="zip"  name="zip" placeholder="
-                                            ">
->>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
                                             <label for="" class="form__label">Zip Code</label>
                                         </div>
                                     </div>
@@ -162,13 +119,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div">
-<<<<<<< HEAD
                                             <input type="text" class="form__input" name="phone" placeholder="
                                             " value= "{{delivery.phone}}">
-=======
-                                            <input type="text" class="form__input" id="phone"  name="phone" placeholder="
-                                            ">
->>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
                                             <label for="" class="form__label">Phone</label>
                                         </div>
                                     </div>
@@ -176,13 +128,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form__div">
-<<<<<<< HEAD
                                             <input type="email" class="form__input" name="email" placeholder="
                                             " value= "{{delivery.email}}" required>
-=======
-                                            <input type="email" class="form__input" id="email"  name="email" placeholder="
-                                            ">
->>>>>>> cfdb4485f270765d114d01fb8d03fb538f98ebcf
                                             <label for="" class="form__label">Email</label>
                                         </div>
                                     </div>

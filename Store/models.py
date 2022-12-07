@@ -9,15 +9,11 @@ CATEGORY_CHOICES = {
     ('C', 'Cameras'),
     ('L', 'Laptops'),
     ('S', 'Smartphones'),
-    
-
-  
 }
 
 LABEL_CHOICES = {
     ('N', 'new'),
     ('S', 'sale')
-  
   
 }
 
@@ -25,16 +21,10 @@ COUNTRY_CHOICES = {
     ('K', ' kenya'),
     ('U', 'uganda'),
     ('T', 'tanzania')
-  
-}
-
-
-COUNTRY_CHOICES ={
-    ('K', 'kenya'),
-    ('U', 'uganda'),
-    ('T', 'tanzania'),
 
 }
+
+
 #product
 class Item(models.Model):
     title = models.CharField(max_length=100)
