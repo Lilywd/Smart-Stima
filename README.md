@@ -1,57 +1,14 @@
 # Django  E-Commerce Website 
 This is an e-commerce website built with Django 3.0 (Python)  for the backend and  
-a bootstrap version [Olog eCommerce Responsive HTML Template](https://www.echotemplate.com/templates/olog-ecommerce-responsive-html-template) designed with HTML, CSS, SCSS, Bootstrap, Javascript & Jquery. for the frontend,
-
-<details>
-<summary>
-
-## Features of this Project
-</summary>
-
-### A. Admin Users Can
-1. Manage Category (Add, Update, Filter and Delete)
-2. Manage Products (Add, Update, Filter and Delete)
-3. Manage Users (Update, Filter and Delete)
-4. Manage Orders (View and Process)
-5. Add coupons
-6. Send newsletters
-
-### B. Non-Registered Users Can
-1. View Products 
-2. Explore Product Details 
-
-
-### C. Registered Users Can Can
-1. Contact us
-2. Add/remove/delete Cart
-3. Pay with PayPal
-4. Subscribe to the newsletter
-5. 
-6. Update Profile 
-7. Change Password
-8. Reset Password
+a bootstrap version [Olog eCommerce Responsive HTML Template](https://www.echotemplate.com/templates/olog-ecommerce-responsive-html-template) designed with HTML, CSS, SCSS, Bootstrap, Javascript & Jquery for the frontend,
 
 
 
 
-</details>
+### How to Install and Run this project?
 
 
-
-
-
-
-<details>
-<summary>
-
-## How to Install and Run this project?
-</summary>
-
-
-
-
-
-### Installation
+##### Installation
 **1. Create a Folder where you want to save the project**
 
 **2. Clone this project**
@@ -169,38 +126,36 @@ To run the tests, in your terminal navigate to the folder with your project in, 
 `$ python manage.py test <app name>`
 
 
-
-</details>
-
-<details><summary>
-
-### Project Screenshots
+#### Project Screenshots
 
 
-</summary>
 
-`landing page`
+
+###### `landing page`
 ![landing page ](assets/landing.PNG)
+<br>
 
-`featured products`
+###### `featured products`
 ![featured products](assets/featured.PNG)
+<br>
 
-`cart`
+###### `cart`
 ![cart](assets/cart.PNG)
+<br>
 
-`shop`
+###### `shop`
 ![shop](assets/shop.PNG)
+<br>
 
-`billing`
+###### `billing`
 ![billing](assets/billling.PNG)
+<br>
 
-`shipping`
+###### `shipping`
 ![shipping](assets/shipping.PNG)
+<br>
 
-`payment`
+###### `payment`
 ![payment](assets/payment.PNG)
 
-
-
-</details>
 
