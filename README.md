@@ -94,30 +94,46 @@ $  pip install -r requirements.txt
 - add the following 
 
 * A new SECRET_KEY can be generated [here](https://www.miniwebtool.com/django-secret-key-generator/)
+
+```
 SECRET_KEY='your new secret key'
 
+```
+
 * For this you can use any smtp service you'd like, i used gmail smtp
+```
 EMAIL_HOST_PASSWORD='your password'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_FROM='your email'
 EMAIL_HOST_USER='your email'
 
+```
+
 * Set up an account with Stripe [here](https://stripe.com/gb) & input STRIPE_PUBLISHABLE_KEY & STRIPE_SECRET_KEY
 
+```
 STRIPE_SECRET_KEY='your stripe key'
+```
 
 * Create an account on google console [here](https://console.cloud.google.com),create a project
+```
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='your google console app secret key'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='your google console id'
 
+```
+
 * Go to [developers facebook](developers.facebook.com/)  click on My Apps and then Create App (If new click on Get Started and create your developer account). Fill in the app name and contact email and click on Create App ID.
+```
 SOCIAL_AUTH_FACEBOOK_KEY='your facebook developer client id'
 SOCIAL_AUTH_FACEBOOK_SECRET='your facebook developer key'
 
+```
+
 * Go to [apps.twitter](apps.twitter.com) and click on Create an App
+```
 SOCIAL_AUTH_TWITTER_KEY='your twitter developer id' 
 SOCIAL_AUTH_TWITTER_SECRET='your twitter developer key'
-
+```
 **8. Make migratations**
 
 ```
@@ -176,7 +192,7 @@ To run the tests, in your terminal navigate to the folder with your project in, 
 ![shop](assets/shop.PNG)
 
 `billing`
-![billing](assets/billing.PNG)
+![billing](assets/billling.PNG)
 
 `shipping`
 ![shipping](assets/shipping.PNG)
