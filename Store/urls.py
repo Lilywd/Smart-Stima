@@ -5,7 +5,7 @@ from Store.views import  ItemDetailView,CartSummaryView,BillingView, PaymentView
 app_name = 'Store'
 
 
-
+# url paths to the pages
 urlpatterns = [
     path('add-to-cart/<slug>/', add_to_cart, name="add-to-cart"),
     path('add-coupon/', AddCouponView.as_view(), name="add-coupon"),

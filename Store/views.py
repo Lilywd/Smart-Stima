@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, DetailView, View
-
 from requests import request
 from Store.models import Coupon, Item, OrderItem, Order, DeliveryAddress, Payment
 from django.utils import timezone
@@ -10,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from Store.forms import CouponForm,BillingForm
 from django.http import HttpResponse
-
 from django.conf import settings
 # Create your views here.
 
@@ -22,12 +20,13 @@ PAYMENT_CHOICES = (
     ('P', 'PayPal')
 )
 
+# landing page
 def home(request):
     items = Item.objects.all()
     context = {'items':items}
     return render(request, 'Store/index.html',context)
 
-
+# Cart page with products added, if no products are added you will be redirected to the home page
 class CartSummaryView(LoginRequiredMixin,View):
     login_url = '/signin'
     redirect_field_name = 'signin'
@@ -44,19 +43,20 @@ class CartSummaryView(LoginRequiredMixin,View):
             messages.warning(self.request, "You do not have an active order")
             return redirect("/")
    
-
+# product description page
 class ItemDetailView(DetailView):
     model = Item
     
     template_name = 'Store/product.html'
 
-
+# all products in the website, login is required to access the page
 @login_required
 def shop(request):
     items = Item.objects.all()
     context = {'items':items}
     return render(request, 'Store/shop.html',context)
 
+# add to cart function
 @login_required
 def add_to_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)
@@ -84,6 +84,7 @@ def add_to_cart(request, slug):
         messages.info(request, "This item was added to your cart")
     return redirect("Store:cart")
 
+# remove/delete item from cart
 @login_required   
 def remove_from_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)
@@ -110,6 +111,8 @@ def remove_from_cart(request, slug):
     else:
         messages.info(request, "You do not have an active order")
         return redirect("Store:product", slug=slug)
+
+# remove single item fom cart
 @login_required
 def remove_single_item_from_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)
@@ -139,8 +142,10 @@ def remove_single_item_from_cart(request, slug):
     else:
         messages.info(request, "You do not have an active order")
         return redirect("Store:product", slug=slug)
-        
+
+# billing form and view, if a user has an order,they can checkout, if they have checked out before they can use those details 
 class BillingView(View):
+    # get user billling details if any
     def get(self, request, *args, **kwargs):
         user= request.user
         try:
@@ -162,7 +167,7 @@ class BillingView(View):
         except ObjectDoesNotExist:
             messages.info(self.request, 'you do not have an active order')
             return redirect('Store:billing')   
-    
+    # if user can fill in their billing details
     def post(self, request, *args, **kwargs):
         user= request.user
         order = Order.objects.get(user=self.request.user, ordered=False)
@@ -179,6 +184,7 @@ class BillingView(View):
         delivery_address = DeliveryAddress(user= self.request.user, first_name=first_name,
         last_name= last_name, address=address, city=city, apartment=apartment,country=country,
         zip=zip, phone=phone, email=email)
+        
         delivery = DeliveryAddress.objects.filter(user=self.request.user).exists()
         if delivery:
             DeliveryAddress.objects.filter(user=user).update(user= self.request.user, first_name=first_name,
@@ -192,7 +198,7 @@ class BillingView(View):
             pass
         return redirect('Store:shipping')
 
-
+# user can add a shiping option which will then be added to the total to be paid
 def shipping(request):
     if request.method == "POST":
         shipping = request.POST["shipping"]
@@ -216,6 +222,7 @@ def shipping(request):
     context ={"user":user, "delivery":delivery}
     return render(request, 'Store/shipping.html', context)
 
+# checks if theres a user, if they have an order, if they have a billing address before proceeding topay
 class PaymentView(View):
     def get(self, request,*args, **kwargs):
         user = request.user
@@ -231,7 +238,7 @@ class PaymentView(View):
         else:
             messages.error(self.request, 'you have not added your delivery information ')
             return redirect('Store:billing') 
-
+    #  if all details are available they can pay
     def post(self, request, *args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
         token = self.request.POST.get('stripeToken')
@@ -305,7 +312,7 @@ class PaymentView(View):
             return redirect("/")
         
     
-            
+# checks validity of the coupon  
 def get_coupon(request, code):
     try:
         coupon = Coupon.objects.get(code=code)
@@ -313,7 +320,7 @@ def get_coupon(request, code):
     except ObjectDoesNotExist:
         messages.info(request, 'coupon does not exist')
         return redirect('Store:billing')  
-       
+# coupon can only be added if the user has an order
 class AddCouponView(View):
     def post(self, request, *args, **kwargs):
         coupon_code = request.POST["coupon"]
@@ -357,7 +364,7 @@ class AddCouponView(View):
 
 
 
-
+# to be added
 def wishlist(request):
     return render(request, 'Store/wishlist.html')
 

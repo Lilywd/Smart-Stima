@@ -150,10 +150,6 @@ def profile(request):
 
 	context['profile_form'] = form
 
-
-
-
-
 	return render(request, "Users/profile.html", context)
 
 def contact(request):
@@ -268,5 +264,4 @@ def newsletter(request):
 
 
 def social_login(request):
-    
     return render(request,'social_login.html')

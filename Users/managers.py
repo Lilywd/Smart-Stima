@@ -39,3 +39,6 @@ class MyUserManager(BaseUserManager):
        user.is_superuser = True
        user.save(using=self._db)
        return user
+
+
+# create a user and superuser if all details are provided

@@ -9,3 +9,5 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
         )
 
 account_activation_token = AccountActivationTokenGenerator()
+
+# used to send the password reset and activate account token
