@@ -66,11 +66,7 @@ EMAIL_HOST_USER='your email'
 
 ```
 
-* Set up an account with Stripe [here](https://stripe.com/gb) & input STRIPE_PUBLISHABLE_KEY & STRIPE_SECRET_KEY
 
-```
-STRIPE_SECRET_KEY='your stripe key'
-```
 
 * Create an account on google console [here](https://console.cloud.google.com),create a project
 ```
@@ -79,14 +75,14 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='your google console id'
 
 ```
 
-* Go to [developers facebook](developers.facebook.com/)  click on My Apps and then Create App (If new click on Get Started and create your developer account). Fill in the app name and contact email and click on Create App ID.
+* Go to [developers facebook](https://developers.facebook.com/)  click on My Apps and then Create App (If new click on Get Started and create your developer account). Fill in the app name and contact email and click on Create App ID.
 ```
 SOCIAL_AUTH_FACEBOOK_KEY='your facebook developer client id'
 SOCIAL_AUTH_FACEBOOK_SECRET='your facebook developer key'
 
 ```
 
-* Go to [apps.twitter](apps.twitter.com) and click on Create an App
+* Go to [apps.twitter](https://apps.twitter.com) and click on Create an App
 ```
 SOCIAL_AUTH_TWITTER_KEY='your twitter developer id' 
 SOCIAL_AUTH_TWITTER_SECRET='your twitter developer key'

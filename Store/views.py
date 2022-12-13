@@ -12,8 +12,7 @@ from django.http import HttpResponse
 from django.conf import settings
 # Create your views here.
 
-import stripe
-stripe.api_key = settings.STRIPE_SECRET_KEY
+
 
 PAYMENT_CHOICES = (
     ('M','Mpesa'),
@@ -203,6 +202,7 @@ def shipping(request):
     if request.method == "POST":
         shipping = request.POST["shipping"]
         order = Order.objects.get(user=request.user, ordered=False)
+       
         if shipping == "1":
             total = order.get_total()
             Order.objects.filter(user=request.user, ordered=False).update(shipping_method = 1)
@@ -232,7 +232,7 @@ class PaymentView(View):
         except:
             delivery = ""
         context ={"user":user, "delivery":delivery, "order":order}
-        print(order.items.count())
+       
         if order.delivery_address:
             return render(self.request, 'Store/payment.html', context)
         else:
@@ -241,75 +241,7 @@ class PaymentView(View):
     #  if all details are available they can pay
     def post(self, request, *args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
-        token = self.request.POST.get('stripeToken')
-        amount= int(order.get_total() * 100)
-        try:
-            charge = stripe.Charge.create(
-                amount=amount,
-                currency="usd",
-                source=token,
-                
-            )
-            payment=Payment()
-            payment.stripe_charge_id = charge['id']
-            payment.user =self.request.user
-            payment.amount = order.get_total()
-            payment.save()
-            
-            order_items = order.items.all
-            order_items.update(ordered=True)
-            for item in order_items:
-                item.save()
-
-
-
-            order.ordered = True
-            order.payment = payment
-            order.save()
-            
-            messages.success(self.request, "Your order was successful!")
-            return redirect("/")
-
-        except stripe.error.CardError as e:
-            body = e.json_body
-            err = body.get('error', {})
-            messages.warning(self.request, f"{err.get('message')}")
-            return redirect("/")
-
-        except stripe.error.RateLimitError as e:
-                # Too many requests made to the API too quickly
-            messages.warning(self.request, "Rate limit error")
-            return redirect("/")
-
-        except stripe.error.InvalidRequestError as e:
-                # Invalid parameters were supplied to Stripe's API
-            print(e)
-            messages.warning(self.request, "Invalid parameters")
-            return redirect("/")
-
-        except stripe.error.AuthenticationError as e:
-                # Authentication with Stripe's API failed
-                # (maybe you changed API keys recently)
-            messages.warning(self.request, "Not authenticated")
-            return redirect("/")
-
-        except stripe.error.APIConnectionError as e:
-                # Network communication with Stripe failed
-            messages.warning(self.request, "Network error")
-            return redirect("/")
-
-        except stripe.error.StripeError as e:
-                # Display a very generic error to the user, and maybe send
-                # yourself an email
-            messages.warning(
-                self.request, "Something went wrong. You were not charged. Please try again.")
-            return redirect("/")
-
-        except Exception as e:
-                # send an email to ourselves
-            messages.warning(
-                self.request, "A serious error occurred. We have been notifed.")
-            return redirect("/")
+        
         
     
 # checks validity of the coupon  

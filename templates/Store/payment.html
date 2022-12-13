@@ -118,9 +118,11 @@
 
     
 
-<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AeyCau3yTLx6G8Ig43g_g_68pHLJrxq25AQTgJMzFp9CFDF53EWCtMh07mZm9QrM6p-S3-zPRlLbSPOQ
+&currency=USD"></script>
 
 <script>
+    var total = '{{order.total}}'
         // Listen for changes to the radio fields
     document.querySelectorAll('input[name=payment-option]').forEach(function(el) {
         el.addEventListener('change', function(event) {
@@ -144,13 +146,33 @@ document.querySelector('#card-button-container').style.display = 'none';
 
         // Render the PayPal button into #paypal-button-container
 paypal.Buttons({
+        
+     // Set up the transaction
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{ 
+                    amount: {
+                        value: total
+                    }
+                }]
+            });
+        },
+
+        // Finalize the transaction
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                // Show a success message to the buyer
+                completeOrder()
+                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                });
+            },
+
     style: {
         layout: 'horizontal'
     }
 }).render('#paypal-button-container');
 </script>
 
-                          
 
 
 {% endblock content %}
